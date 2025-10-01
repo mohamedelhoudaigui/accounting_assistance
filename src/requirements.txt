@@ -16,5 +16,4 @@ psycopg[binary]
 psycopg-pool
 firecrawl-py
 psycopg2-binary
-prometheus-fastapi-instrumentator
-prometheus_client
+pymongo

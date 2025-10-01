@@ -1,5 +1,6 @@
 volumes:
   postgres_data:
+  mongo_data:
   #ollama_data:
 
 networks:
@@ -23,20 +24,22 @@ services:
   mongo:
     image: mongo:latest
     container_name: mongo
-
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+    env_file:
+      - ./.env
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - ai-network
 
   postgres:
     image: postgres:latest
     container_name: postgres
     ports:
       - 5432:5432
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ggwhatthefuck123
-      POSTGRES_DB: accounting_database
+    env_file:
+      - ./.env
     volumes:
       - postgres_data:/var/lib/postgresql/data/
       - ./postgres_init:/docker-entrypoint-initdb.d

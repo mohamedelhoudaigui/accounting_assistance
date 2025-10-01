@@ -3,7 +3,9 @@ import shutil
 from fastapi import UploadFile
 from agent.agent_setup import AiAgent
 from storage.FileProcessor import FileProcessor
-from storage.DataStorage import PostgresDataStorage
+from storage.PostgresStorage import PostgresDataStorage
+from storage.MongoStorage import MongoStorage
+
 from backend import models
 
 # Instantiate your services here
@@ -11,6 +13,7 @@ from backend import models
 agent = AiAgent()
 file_processor = FileProcessor()
 db = PostgresDataStorage()
+db_ = MongoStorage()
 UPLOAD_DIR = "upload"
 
 
@@ -48,6 +51,12 @@ async def get_all_invoice_lines():
     invoice_lines = await db.fetch_all(query)
     return invoice_lines
 
+
+async def process_and_store_file():
+    """
+    Handles upload and store files in mongo db
+    """
+    
 
 async def create_new_invoice(invoice: models.SageInvoice) -> dict:
 

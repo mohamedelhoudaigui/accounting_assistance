@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 import os
 import logging
 import sys
-from prometheus_fastapi_instrumentator import Instrumentator
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
@@ -21,9 +20,6 @@ app.include_router(api_router)
 # Mount the static files directory
 # This will serve files from 'src/frontend' under the '/static' path
 app.mount("/static", StaticFiles(directory="frontend"), name="static")
-
-
-Instrumentator().instrument(app).expose(app)
 
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
