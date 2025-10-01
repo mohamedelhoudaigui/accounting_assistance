@@ -1,0 +1,54 @@
+volumes:
+  postgres_data:
+  #ollama_data:
+
+networks:
+  ai-network:
+
+services:
+  ai:
+    build:
+      context: ./src
+      dockerfile: ai.dockerfile
+    container_name: ai
+    ports:
+      - 5555:5555
+    env_file:
+      - ./.env
+    networks:
+      - ai-network
+    depends_on:
+      - postgres
+
+  mongo:
+    image: mongo:latest
+    container_name: mongo
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ggwhatthefuck123
+      POSTGRES_DB: accounting_database
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+      - ./postgres_init:/docker-entrypoint-initdb.d
+    networks:
+      - ai-network
+
+  # ollama:
+  #   container_name: ollama
+  #   image: ollama/ollama:latest
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama_data:/root/.ollama
+  #   networks:
+  #     - ai-network

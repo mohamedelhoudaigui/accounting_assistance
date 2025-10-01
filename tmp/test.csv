@@ -1,0 +1,7 @@
+Invoice Number,Customer Name,Customer Address,Invoice Date,Due Date,Item Description,Quantity,Unit Price
+INV-001,John Smith,"123 Main St, Anytown, USA",2025-09-01,2025-10-01,"Standard Widget",10,15.50
+INV-001,John Smith,"123 Main St, Anytown, USA",2025-09-01,2025-10-01,"Premium Gadget",5,40.00
+INV-002,Jane Doe,"456 Oak Ave, Otherville, USA",2025-09-03,2025-10-03,"Consulting Services",1,250.00
+INV-003,ACME Corp,"789 Pine Ln, Corp City, USA",2025-09-05,2025-10-05,"Bulk Widgets (Box)",100,14.00
+INV-003,ACME Corp,"789 Pine Ln, Corp City, USA",2025-09-05,2025-10-05,"Annual Support Contract",1,500.00
+INV-004,Peter Jones,"321 Elm Rd, Sometown, USA",2025-09-06,2025-10-06,"Shipping and Handling",1,75.25
