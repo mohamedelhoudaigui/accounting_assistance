@@ -13,7 +13,7 @@ AI_PORT=5555
 
 POSTGRES_HOST=postgres
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=ggwhatthefuck123
+POSTGRES_PASSWORD=ggexamplepass
 POSTGRES_DB=accounting_database
 
 MONGO_HOST=mongo
