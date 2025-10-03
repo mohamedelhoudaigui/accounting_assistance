@@ -21,6 +21,7 @@ MONGO_USER=root
 MONGO_PASSWORD=example
 MONGO_DB=accounting_documents
 MONGO_PORT=27017
+MONGO_URI=mongodb://root:example@mongo:27017/accounting_documents?authSource=admin
 
 # fire crawl :
 FIRECRAWL_API_KEY=

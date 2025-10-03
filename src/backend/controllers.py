@@ -13,7 +13,7 @@ from backend import models
 agent = AiAgent()
 file_processor = FileProcessor()
 db = PostgresDataStorage()
-db_ = MongoStorage()
+mongo_db = MongoStorage()
 UPLOAD_DIR = "upload"
 
 
@@ -52,11 +52,30 @@ async def get_all_invoice_lines():
     return invoice_lines
 
 
-async def process_and_store_file():
+def process_and_store_file(file: UploadFile):
     """
-    Handles upload and store files in mongo db
+    Controller logic to save, process, and store a file.
     """
-    
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    try:
+        processed_data = file_processor.process_file(file_path, mongo_db)
+        if processed_data.get("error"):
+            raise ValueError(processed_data.get("error"))
+
+        mongo_db.insert_doc(processed_data)
+
+        return {
+            "filename": file.filename,
+            "detail": "File processed and stored successfully."
+        }
+    finally:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
 
 async def create_new_invoice(invoice: models.SageInvoice) -> dict:
 

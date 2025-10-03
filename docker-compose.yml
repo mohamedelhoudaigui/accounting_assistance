@@ -20,6 +20,7 @@ services:
       - ai-network
     depends_on:
       - postgres
+      - mongo
 
   mongo:
     image: mongo:latest

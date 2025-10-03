@@ -8,22 +8,32 @@ logger = logging.getLogger(__name__)
 
 class MongoStorage:
     def __init__(self):
-        # Construct the connection string from environment variables
-        self.client = MongoClient(
-            host=os.getenv("MONGO_HOST"),
-            port=int(os.getenv("MONGO_PORT")),
-            username=os.getenv("MONGO_USER"),
-            password=os.getenv("MONGO_PASSWORD"),
-        )
-        self.db = self.client[os.getenv("MONGO_DB")]
-        logger.info("MongoDB connection established.")
+        mongo_uri = os.getenv("MONGO_URI")
+        db_name = os.getenv("MONGO_DB")
+
+        if not mongo_uri or not db_name:
+            raise ValueError("MONGO_URI and MONGO_DB environment variables must be set")
+
+        # Connect using the full URI
+        self.client = MongoClient(mongo_uri)
+        
+        # Select the database
+        self.db = self.client[db_name]
+        
+        # Optional: Verify connection by sending a ping
+        try:
+            self.client.admin.command('ping')
+            logger.info("MongoDB connection successful.")
+        except Exception as e:
+            logger.error(f"MongoDB connection failed: {e}")
+            raise
 
     def close(self):
         """Closes the connection to the database."""
         self.client.close()
         logger.info("MongoDB connection closed.")
 
-    def insert_doc(self, data: dict, collection_name: str):
+    def insert_doc(self, data: dict):
         """
         Inserts a document into the specified collection.
 
@@ -34,6 +44,6 @@ class MongoStorage:
         Returns:
             The ID of the inserted document.
         """
-        collection = self.db[collection_name]
+        collection = self.db["documents"]
         result = collection.insert_one(data)
         return result.inserted_id
