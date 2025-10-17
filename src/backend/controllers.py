@@ -5,15 +5,16 @@ from agent.agent_setup import AiAgent
 from storage.FileProcessor import FileProcessor
 from storage.PostgresStorage import PostgresDataStorage
 from storage.MongoStorage import MongoStorage
+from storage.ChromaStorage import ChromaStorage
 
 from backend import models
 
-# Instantiate your services here
-# These are like singletons for the application
 agent = AiAgent()
 file_processor = FileProcessor()
 db = PostgresDataStorage()
 mongo_db = MongoStorage()
+chroma_db = ChromaStorage()
+
 UPLOAD_DIR = "upload"
 
 
@@ -67,11 +68,13 @@ def process_and_store_file(file: UploadFile):
             raise ValueError(processed_data.get("error"))
 
         mongo_db.insert_doc(processed_data)
+        chroma_db.add_to_collection(processed_data)
 
         return {
             "filename": file.filename,
             "detail": "File processed and stored successfully."
         }
+
     finally:
         if os.path.exists(file_path):
             os.remove(file_path)
