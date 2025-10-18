@@ -11,6 +11,7 @@ class UploadResponse(BaseModel):
     filename: str
     detail: str
 
+
 class InvoiceLine(BaseModel):
     """
     Represents a single line item on a Sage invoice.

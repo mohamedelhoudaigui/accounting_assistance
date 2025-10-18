@@ -16,6 +16,8 @@ services:
       - 5555:5555
     env_file:
       - ./.env
+    volumes:
+      - ./src:/app
     networks:
       - ai-network
     depends_on:
@@ -29,9 +31,7 @@ services:
       - 27017:27017
     env_file:
       - ./.env
-    
-    #MONGO_INITDB_ROOT_USERNAME: root
-    #MONGO_INITDB_ROOT_PASSWORD: example
+
     volumes:
       - mongo_data:/data/db
     networks:

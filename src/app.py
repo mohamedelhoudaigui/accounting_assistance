@@ -17,14 +17,7 @@ app = FastAPI()
 # Mount the API router
 app.include_router(api_router)
 
-# Mount the static files directory
-# This will serve files from 'src/frontend' under the '/static' path
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/")
 async def read_root():
-    """
-    Serve the main HTML file for the chat interface.
-    """
-    with open("frontend/index.html") as f:
-        return HTMLResponse(content=f.read(), status_code=200)
+     return "server is launched !"

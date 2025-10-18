@@ -67,8 +67,8 @@ def process_and_store_file(file: UploadFile):
         if processed_data.get("error"):
             raise ValueError(processed_data.get("error"))
 
-        mongo_db.insert_doc(processed_data)
-        chroma_db.add_to_collection(processed_data)
+        mongo_id = mongo_db.insert_doc(processed_data)
+        chroma_db.add_to_collection(processed_data, str(mongo_id))
 
         return {
             "filename": file.filename,
@@ -120,3 +120,11 @@ async def create_new_invoice(invoice: models.SageInvoice) -> dict:
         await db.execute(line_query, line_params)
 
     return {"status": "success", "invoice_id": invoice_id, "contact_id": contact_id}
+
+
+def get_all_chroma_documents():
+    """
+    Controller logic to fetch all documents from the ChromaDB collection.
+    """
+    documents = chroma_db.get_all_documents()
+    return documents

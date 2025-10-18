@@ -25,8 +25,8 @@ async def upload_file(file: UploadFile = File(...)):
     """
     try:
         result = controllers.process_and_store_file(file)
-        
         return result
+
     except ValueError as e:
         # Catch specific errors from the controller to return a 400
         raise HTTPException(status_code=400, detail=str(e))
@@ -81,3 +81,16 @@ async def create_invoice(invoice: models.SageInvoice):
     except Exception as e:
         # A more specific error could be raised for duplicate invoice_number
         raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+
+
+@router.get("/chroma/all")
+async def get_all_documents_from_chroma():
+    """
+    API Endpoint to get all documents from the ChromaDB collection.
+    Useful for debugging and visualization.
+    """
+    try:
+        documents = controllers.get_all_chroma_documents()
+        return documents
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

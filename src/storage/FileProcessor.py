@@ -50,6 +50,7 @@ class FileProcessor:
 		except Exception as e:
 			return(f"Pytesseract OCR failed: {e}")
 
+
 	def process_pdf_document(self, file_path):
 		try:
 			doc = fitz.open(file_path)
@@ -98,7 +99,7 @@ class FileProcessor:
 					"source": os.path.basename(file_path),
 					"type": "excel"
 				},
-				"data": {}
+				"content": {}
 			}
 			xls = pd.ExcelFile(file_path)
 			all_sheets_data = {}
@@ -113,7 +114,7 @@ class FileProcessor:
 				sheet_data = df.to_dict(orient='records')
 				all_sheets_data[sheet_name] = sheet_data
 			
-			result["data"] = all_sheets_data
+			result["content"] = all_sheets_data
 			return result
 
 		except Exception as e:
@@ -129,7 +130,7 @@ class FileProcessor:
 					"type": "csv"
 				},
 				
-				"data": df.to_dict(orient='records')
+				"content": df.to_dict(orient='records')
 			}
 			return json_file
 
