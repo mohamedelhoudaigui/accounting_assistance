@@ -18,3 +18,9 @@ firecrawl-py
 psycopg2-binary
 pymongo
 chromadb
+langchain
+langchain-community
+langchain-chroma
+langchain-text-splitters
+pypdf
+docx2txt

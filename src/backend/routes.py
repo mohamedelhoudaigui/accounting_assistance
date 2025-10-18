@@ -94,3 +94,16 @@ async def get_all_documents_from_chroma():
         return documents
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/mongo/all")
+async def get_all_documents_from_mongo():
+    """
+    API endpoint to get all documents from mongo db.
+    """
+    try:
+        documents = controllers.get_all_mongo_documents()
+        return documents
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

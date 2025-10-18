@@ -17,6 +17,7 @@ chroma_db = ChromaStorage()
 
 UPLOAD_DIR = "upload"
 
+# ------------- Agent intercation routes:
 
 async def process_query(query: str) -> dict | list | str:
     """
@@ -25,6 +26,8 @@ async def process_query(query: str) -> dict | list | str:
     result = await agent.run(query)
     return result
 
+
+#--------------- postgress routes:
 
 async def get_all_invoices():
     """
@@ -51,33 +54,6 @@ async def get_all_invoice_lines():
     query = "SELECT * FROM invoice_lines ORDER BY created_at DESC;"
     invoice_lines = await db.fetch_all(query)
     return invoice_lines
-
-
-def process_and_store_file(file: UploadFile):
-    """
-    Controller logic to save, process, and store a file.
-    """
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    try:
-        processed_data = file_processor.process_file(file_path, mongo_db)
-        if processed_data.get("error"):
-            raise ValueError(processed_data.get("error"))
-
-        mongo_id = mongo_db.insert_doc(processed_data)
-        chroma_db.add_to_collection(processed_data, str(mongo_id))
-
-        return {
-            "filename": file.filename,
-            "detail": "File processed and stored successfully."
-        }
-
-    finally:
-        if os.path.exists(file_path):
-            os.remove(file_path)
 
 
 async def create_new_invoice(invoice: models.SageInvoice) -> dict:
@@ -122,9 +98,49 @@ async def create_new_invoice(invoice: models.SageInvoice) -> dict:
     return {"status": "success", "invoice_id": invoice_id, "contact_id": contact_id}
 
 
+#----------data storage routes:
+
+def process_and_store_file(file: UploadFile):
+    """
+    Controller logic to save, process, and store a file.
+    """
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    try:
+        processed_document = file_processor.process_file(file_path)
+        mongo_id = mongo_db.insert_langchain_documents(processed_document, file.filename)
+        #chroma_db.add_to_collection(processed_data, str(mongo_id))
+
+        return {
+            "filename": file.filename,
+            "detail": "File processed and stored successfully."
+        }
+
+    finally:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+
+
+#--------------chroma db routes:
+
+
 def get_all_chroma_documents():
     """
     Controller logic to fetch all documents from the ChromaDB collection.
     """
     documents = chroma_db.get_all_documents()
+    return documents
+
+
+#----------mongo db routes:
+
+def get_all_mongo_documents():
+    """
+    Controller to get all mongo db collection items.
+    """
+
+    documents = mongo_db.get_all_docs()
     return documents

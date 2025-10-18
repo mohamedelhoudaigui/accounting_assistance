@@ -1,6 +1,8 @@
 import os
 from pymongo import MongoClient
 import logging
+from typing import List
+from langchain_core.documents import Document
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -33,6 +35,40 @@ class MongoStorage:
         self.client.close()
         logger.info("MongoDB connection closed.")
 
+
+    def insert_langchain_documents(self, documents: List[Document], source_file: str):
+        """
+        Converts a list of LangChain documents into a single record and inserts it into MongoDB.
+
+        Args:
+            documents (List[Document]): The list of documents loaded by LangChain.
+            source_file (str): The original filename.
+
+        Returns:
+            The ID of the inserted MongoDB record.
+        """
+        if not documents:
+            return None
+
+        # Create a single record that represents the entire file
+        # The first document's metadata is often representative of the whole file
+        record = {
+            "source": source_file,
+            "metadata": documents[0].metadata,
+            "content": [
+                {
+                    "page_content": doc.page_content,
+                    "metadata": doc.metadata
+                }
+                for doc in documents
+            ]
+        }
+
+        collection = self.db["documents"]
+        result = collection.insert_one(record)
+        return result.inserted_id
+
+
     def insert_doc(self, data: dict):
         """
         Inserts a document into the specified collection.
@@ -47,3 +83,10 @@ class MongoStorage:
         collection = self.db["documents"]
         result = collection.insert_one(data)
         return result.inserted_id
+
+    def get_all_docs(self):
+        """
+        Get all mongo db collection items from self.collection.
+        """
+
+        return self.db["documents"].find()
