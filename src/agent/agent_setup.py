@@ -13,7 +13,7 @@ from agno.knowledge.embedder.huggingface import HuggingfaceCustomEmbedder
 class AiAgent:
 	def __init__(self):
 
-		self.embedder = HuggingfaceCustomEmbedder(id="all-MiniLM-L6-v2")
+		self.embedder = HuggingfaceCustomEmbedder(id="sentence-transformers/all-MiniLM-L6-v2")
 
 		self.llm = Gemini(
 			id=os.getenv("MODEL_NAME")
@@ -46,6 +46,8 @@ class AiAgent:
 
 
 		self.agent = Agent(
+			add_knowledge_to_context=True,
+			#search_knowledge=False,
 			model=self.llm,
 			tools=self.tools,
 			knowledge=self.knowledge, # <-- Pass the knowledge base here

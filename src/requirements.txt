@@ -26,3 +26,4 @@ pypdf
 docx2txt
 unstructured[all-docs]
 sentence-transformers
+langchain-huggingface
