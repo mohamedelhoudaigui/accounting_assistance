@@ -8,6 +8,11 @@ KEEP_IN_MEMORY=True
 REASONING=False
 VERBOSE=True
 
+# chroma db :
+
+DB_PATH='./accounting_db'
+COLLECTION_NAME='accounting'
+
 # server :
 AI_PORT=5555
 
@@ -27,3 +32,7 @@ MONGO_INITDB_ROOT_PASSWORD=example
 
 # fire crawl :
 FIRECRAWL_API_KEY=
+
+# hugging face :
+
+HUGGING_FACE_HUB_TOKEN=

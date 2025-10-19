@@ -24,8 +24,8 @@ class AiAgent:
 			name="accounting_documents_kb",
 			description="Contains the content of user-uploaded documents like invoices, receipts, and spreadsheets.",
 			vector_db=ChromaDb(
-				collection="accounting",
-				path="/app/src/accounting_db",
+				collection=os.getenv('COLLECTION_NAME'),
+				path=os.getenv('DB_PATH'),
 				persistent_client=True,
 				embedder=self.embedder
 			)
