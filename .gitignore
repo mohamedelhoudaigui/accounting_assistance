@@ -9,8 +9,6 @@ __pycache__/
 
 tmp/
 
-src/accounting_db/
-
 # Distribution / packaging
 .Python
 build/
