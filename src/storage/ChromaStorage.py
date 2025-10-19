@@ -17,12 +17,12 @@ class ChromaStorage:
         Initializes the ChromaStorage service, setting up the embedding model,
         text splitter, and the Chroma vector store itself.
         """
-        self.db_path = os.getenv('DB_PATH', 'lancedb')
-        self.collection_name = os.getenv('COLLECTION_NAME', 'accounting_docs')
+        self.db_path = os.getenv('DB_PATH')
+        self.collection_name = os.getenv('COLLECTION_NAME')
         os.makedirs(self.db_path, exist_ok=True)
 
         self.embedding_function = SentenceTransformerEmbeddings(
-            model_name="all-MiniLM-L6-v2"
+            model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
 
         self.text_splitter = RecursiveCharacterTextSplitter(
