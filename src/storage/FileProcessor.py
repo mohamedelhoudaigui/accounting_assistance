@@ -6,6 +6,8 @@ from langchain_community.document_loaders import (
     Docx2txtLoader,
     TextLoader,
     CSVLoader,
+    UnstructuredExcelLoader,
+    UnstructuredImageLoader
 )
 
 class FileProcessor:
@@ -17,6 +19,10 @@ class FileProcessor:
             ".doc": Docx2txtLoader,
             ".txt": TextLoader,
             ".csv": CSVLoader,
+            ".xlsx": UnstructuredExcelLoader,
+            ".xls": UnstructuredExcelLoader,
+            ".png": UnstructuredImageLoader,
+            ".jpg": UnstructuredImageLoader 
         }
 
     def process_file(self, file_path: str) -> List[Document]:

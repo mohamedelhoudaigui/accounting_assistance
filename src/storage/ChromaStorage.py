@@ -46,3 +46,28 @@ class ChromaStorage:
 			A dictionary containing all data from the collection.
 		"""
 		return self.collection.get()
+
+	def delete_all_documents(self):
+		"""
+		Deletes and re-creates the entire ChromaDB collection to erase all documents.
+
+		Returns:
+			The number of documents deleted.
+		"""
+		try:
+
+			self.vector_store.delete_collection()
+			logger.info(f"Deleted ChromaDB collection '{self.collection_name}' with {count} documents.")
+
+			self.vector_store = Chroma(
+				collection_name=self.collection_name,
+				embedding_function=self.embedding_function,
+				persist_directory=self.db_path,
+			)
+
+			logger.info(f"Re-created empty ChromaDB collection '{self.collection_name}'.")
+			return count
+
+		except Exception as e:
+			logger.error(f"Failed to delete and re-create ChromaDB collection: {e}")
+			return 0
