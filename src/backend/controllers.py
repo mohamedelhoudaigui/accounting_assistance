@@ -126,7 +126,7 @@ def process_and_store_file(file: UploadFile):
 	try:
 		processed_document = file_processor.process_file(file_path)
 		mongo_id = mongo_db.insert_langchain_documents(processed_document, file.filename)
-		#chroma_db.add_to_collection(processed_data, str(mongo_id))
+		chroma_db.add_to_collection(processed_document, str(mongo_id))
 
 		return {
 			"filename": file.filename,

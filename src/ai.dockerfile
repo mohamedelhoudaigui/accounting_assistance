@@ -3,6 +3,7 @@ FROM python:3.12-slim
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	tesseract-ocr \
 	curl \
+    libgl1 \
     ca-certificates \
     && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
@@ -16,8 +17,6 @@ RUN node --version && npm --version
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
-
-WORKDIR /app
 
 RUN mkdir upload
 
