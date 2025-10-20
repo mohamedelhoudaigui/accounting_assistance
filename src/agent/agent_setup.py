@@ -4,9 +4,7 @@ from agno.agent import Agent
 from agno.models.google import Gemini
 from agno.tools.postgres import PostgresTools
 from agno.tools.firecrawl import FirecrawlTools
-from agno.memory import MemoryManager
 from agno.knowledge.knowledge import Knowledge
-from storage.ChromaStorage import ChromaStorage
 from agno.vectordb.chroma import ChromaDb
 from agno.knowledge.embedder.huggingface import HuggingfaceCustomEmbedder
 
@@ -19,7 +17,6 @@ class AiAgent:
 			id=os.getenv("MODEL_NAME")
 		)
 
-
 		self.knowledge = Knowledge(
 			name="accounting_documents_kb",
 			description="Contains the content of user-uploaded documents like invoices, receipts, and spreadsheets.",
@@ -31,28 +28,25 @@ class AiAgent:
 			)
 		)
 
+
 		self.tools = [
 			FirecrawlTools(enable_scrape=True, enable_crawl=True),
 			PostgresTools(
 				host=os.getenv("POSTGRES_HOST"),
-				port=int(os.getenv("POSTGRESS_PORT")),
+				port=int(os.getenv("POSTGRES_PORT")),
 				db_name=os.getenv("POSTGRES_DB"),
 				user=os.getenv("POSTGRES_USER"),
 				password=os.getenv("POSTGRES_PASSWORD")
 			)
 		]
 
-		self.memory_manager = MemoryManager()
-
 
 		self.agent = Agent(
 			add_knowledge_to_context=True,
-			search_knowledge=False,
 			model=self.llm,
 			tools=self.tools,
 			knowledge=self.knowledge,
 			markdown=True,
-			memory_manager=self.memory_manager,
 			instructions=("You are an expert accounting assistant. Your primary goal is to provide accurate answers based on the user's data.\n"
 						"1. **Always check the knowledge base first.** The knowledge base contains the content of the user's private, uploaded files. Use it to answer questions about specific invoices, expenses, or other document details.\n"
 						"2. **If the knowledge base doesn't have the answer, query the PostgreSQL database.** The database contains structured data about invoices (`sage_invoices`, `invoice_lines`) and contacts (`contacts`). Use your SQL tools to query this data for totals, summaries, or specific records.\n"

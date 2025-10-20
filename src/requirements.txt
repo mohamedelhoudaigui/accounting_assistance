@@ -12,10 +12,10 @@ asyncio
 fastapi
 uvicorn
 pydantic
-psycopg[binary]
 psycopg-pool
 firecrawl-py
 psycopg2-binary
+psycopg[binary]
 pymongo
 chromadb
 langchain
