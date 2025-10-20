@@ -7,6 +7,7 @@ from agno.tools.firecrawl import FirecrawlTools
 from agno.knowledge.knowledge import Knowledge
 from agno.vectordb.chroma import ChromaDb
 from agno.knowledge.embedder.huggingface import HuggingfaceCustomEmbedder
+from agno.memory import MemoryManager
 
 class AiAgent:
 	def __init__(self):
@@ -28,6 +29,8 @@ class AiAgent:
 			)
 		)
 
+		self.memory_manager = MemoryManager()
+
 
 		self.tools = [
 			FirecrawlTools(enable_scrape=True, enable_crawl=True),
@@ -46,12 +49,8 @@ class AiAgent:
 			model=self.llm,
 			tools=self.tools,
 			knowledge=self.knowledge,
+			memory_manager=self.memory_manager,
 			markdown=True,
-			instructions=("You are an expert accounting assistant. Your primary goal is to provide accurate answers based on the user's data.\n"
-						"1. **Always check the knowledge base first.** The knowledge base contains the content of the user's private, uploaded files. Use it to answer questions about specific invoices, expenses, or other document details.\n"
-						"2. **If the knowledge base doesn't have the answer, query the PostgreSQL database.** The database contains structured data about invoices (`sage_invoices`, `invoice_lines`) and contacts (`contacts`). Use your SQL tools to query this data for totals, summaries, or specific records.\n"
-						"3. **Only use the web browser if the question is general** and cannot be answered by the user's documents or the database (e.g., 'What are the current tax regulations in Morocco?').\n"
-						"4. When presenting data, especially financial data, be precise and clear. If you are providing data from a document, mention the source.")
 		)
 
 		print("AiAgent initialized with ChromaDB Knowledge Base.")

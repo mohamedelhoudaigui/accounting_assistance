@@ -10,7 +10,7 @@ VERBOSE=True
 
 # chroma db :
 
-DB_PATH='./accounting_db'
+DB_PATH='/app/accounting_db'
 COLLECTION_NAME='accounting'
 
 # server :
@@ -18,8 +18,9 @@ AI_PORT=5555
 
 POSTGRES_HOST=postgres
 POSTGRES_USER=postgres
-POSTGRES_PASSWORD=ggexamplepass
+POSTGRES_PASSWORD=ggwhatthefuck123
 POSTGRES_DB=accounting_database
+POSTGRES_PORT=5432
 
 MONGO_HOST=mongo
 MONGO_USER=root
