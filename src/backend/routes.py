@@ -14,7 +14,6 @@ async def run_query(query: models.Query):
 		result = await controllers.process_query(query.query)
 		return {"result": result.content}
 	except Exception as e:
-		# The route layer is responsible for HTTP errors
 		raise HTTPException(status_code=500, detail=str(e))
 
 
@@ -28,7 +27,6 @@ async def upload_file(file: UploadFile = File(...)):
 		return result
 
 	except ValueError as e:
-		# Catch specific errors from the controller to return a 400
 		raise HTTPException(status_code=400, detail=str(e))
 	except Exception as e:
 		raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
@@ -47,7 +45,7 @@ async def get_invoices():
 
 
 @router.get("/contacts")
-async def get_invoices():
+async def get_contacts():
 	"""
 	API Endpoint to get all contacts.
 	"""
@@ -59,7 +57,7 @@ async def get_invoices():
 
 
 @router.get("/invoice_lines")
-async def get_invoices():
+async def get_invoice_lines():
 	"""
 	API Endpoint to get all invoice_lines.
 	"""
@@ -79,7 +77,6 @@ async def create_invoice(invoice: models.SageInvoice):
 		result = await controllers.create_new_invoice(invoice)
 		return result
 	except Exception as e:
-		# A more specific error could be raised for duplicate invoice_number
 		raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
 

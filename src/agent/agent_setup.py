@@ -34,11 +34,11 @@ class AiAgent:
 		self.tools = [
 			FirecrawlTools(enable_scrape=True, enable_crawl=True),
 			PostgresTools(
-				host="postgres",
-				port=5432,
-				db_name="accounting_database",
-				user="postgres",
-				password="ggwhatthefuck123"
+				host=os.getenv("POSTGRES_HOST"),
+				port=int(os.getenv("POSTGRESS_PORT")),
+				db_name=os.getenv("POSTGRES_DB"),
+				user=os.getenv("POSTGRES_USER"),
+				password=os.getenv("POSTGRES_PASSWORD")
 			)
 		]
 
@@ -47,13 +47,17 @@ class AiAgent:
 
 		self.agent = Agent(
 			add_knowledge_to_context=True,
-			#search_knowledge=False,
+			search_knowledge=False,
 			model=self.llm,
 			tools=self.tools,
-			knowledge=self.knowledge, # <-- Pass the knowledge base here
+			knowledge=self.knowledge,
 			markdown=True,
 			memory_manager=self.memory_manager,
-			instructions="You are a helpful accounting assistant. First, check your knowledge base for information from user-uploaded files. If you can't find an answer there, you can use your other tools to query the database or browse the web."
+			instructions=("You are an expert accounting assistant. Your primary goal is to provide accurate answers based on the user's data.\n"
+						"1. **Always check the knowledge base first.** The knowledge base contains the content of the user's private, uploaded files. Use it to answer questions about specific invoices, expenses, or other document details.\n"
+						"2. **If the knowledge base doesn't have the answer, query the PostgreSQL database.** The database contains structured data about invoices (`sage_invoices`, `invoice_lines`) and contacts (`contacts`). Use your SQL tools to query this data for totals, summaries, or specific records.\n"
+						"3. **Only use the web browser if the question is general** and cannot be answered by the user's documents or the database (e.g., 'What are the current tax regulations in Morocco?').\n"
+						"4. When presenting data, especially financial data, be precise and clear. If you are providing data from a document, mention the source.")
 		)
 
 		print("AiAgent initialized with ChromaDB Knowledge Base.")

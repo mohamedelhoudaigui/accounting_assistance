@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date
 
-# This model defines the shape of the data for a query request
 class Query(BaseModel):
     query: str
 

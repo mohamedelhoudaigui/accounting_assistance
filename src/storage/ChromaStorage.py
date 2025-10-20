@@ -7,6 +7,7 @@ from langchain_core.documents import Document
 from langchain_chroma import Chroma
 from langchain_community.embeddings import SentenceTransformerEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_huggingface import HuggingFaceEmbeddings
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +22,7 @@ class ChromaStorage:
         self.collection_name = os.getenv('COLLECTION_NAME')
         os.makedirs(self.db_path, exist_ok=True)
 
-        self.embedding_function = SentenceTransformerEmbeddings(
+        self.embedding_function = HuggingFaceEmbeddings(
             model_name="sentence-transformers/all-MiniLM-L6-v2"
         )
 
