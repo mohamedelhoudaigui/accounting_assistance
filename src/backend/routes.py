@@ -32,55 +32,7 @@ async def upload_file(file: UploadFile = File(...)):
 		raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
 
 
-@router.get("/invoices")
-async def get_invoices():
-	"""
-	API Endpoint to get all invoices.
-	"""
-	try:
-		documents = await controllers.get_all_invoices()
-		return documents
-	except Exception as e:
-		raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/contacts")
-async def get_contacts():
-	"""
-	API Endpoint to get all contacts.
-	"""
-	try:
-		contacts = await controllers.get_all_contacts()
-		return contacts
-	except Exception as e:
-		raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.get("/invoice_lines")
-async def get_invoice_lines():
-	"""
-	API Endpoint to get all invoice_lines.
-	"""
-	try:
-		invoice_lines = await controllers.get_all_invoice_lines()
-		return invoice_lines
-	except Exception as e:
-		raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.post("/create_invoice")
-async def create_invoice(invoice: models.SageInvoice):
-	"""
-	API Endpoint to create a new invoice in the database.
-	"""
-	try:
-		result = await controllers.create_new_invoice(invoice)
-		return result
-	except Exception as e:
-		raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
-
-
-@router.get("/chroma/all")
+@router.get("/get_all_docs")
 async def get_all_documents_from_chroma():
 	"""
 	API Endpoint to get all documents from the ChromaDB collection.
@@ -93,20 +45,7 @@ async def get_all_documents_from_chroma():
 		raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get("/mongo/all")
-async def get_all_documents_from_mongo():
-	"""
-	API endpoint to get all documents from mongo db.
-	"""
-	try:
-		documents = controllers.get_all_mongo_documents()
-		return documents
-
-	except Exception as e:
-		raise HTTPException(status_code=500, detail=str(e))
-
-
-@router.delete("/debug/erase-all", status_code=200)
+@router.delete("/erase_all_docs")
 async def erase_all_data_for_debugging():
 	"""
 	API Endpoint to erase all documents from MongoDB and ChromaDB.
