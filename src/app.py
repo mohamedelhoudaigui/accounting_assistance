@@ -3,10 +3,7 @@ from dotenv import load_dotenv
 import os
 import logging
 import sys
-
 from fastapi import FastAPI
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse
 from backend.routes import router as api_router
 
 # Load environment variables at the start

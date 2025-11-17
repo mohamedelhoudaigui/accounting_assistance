@@ -1,8 +1,3 @@
-volumes:
-  postgres_data:
-  mongo_data:
-  #ollama_data:
-
 networks:
   ai-network:
 
@@ -20,41 +15,3 @@ services:
       - ./src:/app
     networks:
       - ai-network
-    depends_on:
-      - postgres
-      - mongo
-
-  mongo:
-    image: mongo:latest
-    container_name: mongo
-    ports:
-      - 27017:27017
-    env_file:
-      - ./.env
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - ai-network
-
-  postgres:
-    image: postgres:latest
-    container_name: postgres
-    ports:
-      - 5432:5432
-    env_file:
-      - ./.env
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-      - ./postgres_init:/docker-entrypoint-initdb.d
-    networks:
-      - ai-network
-
-  # ollama:
-  #   container_name: ollama
-  #   image: ollama/ollama:latest
-  #   ports:
-  #     - "11434:11434"
-  #   volumes:
-  #     - ollama_data:/root/.ollama
-  #   networks:
-  #     - ai-network

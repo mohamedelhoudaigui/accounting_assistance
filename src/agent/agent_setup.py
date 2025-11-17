@@ -6,7 +6,9 @@ from agno.tools.postgres import PostgresTools
 from agno.knowledge.knowledge import Knowledge
 from agno.vectordb.chroma import ChromaDb
 from agno.knowledge.embedder.huggingface import HuggingfaceCustomEmbedder
-from agno.memory import MemoryManager
+from agno.db.sqlite import SqliteDb
+from agno.tools.visualization import VisualizationTools
+
 
 class AiAgent:
 	def __init__(self):
@@ -16,6 +18,8 @@ class AiAgent:
 		self.llm = Gemini(
 			id=os.getenv("MODEL_NAME")
 		)
+
+		self.db = SqliteDb(db_file="memory.db")
 
 		self.knowledge = Knowledge(
 			name="accounting_documents_kb",
@@ -28,20 +32,24 @@ class AiAgent:
 			)
 		)
 
-		self.memory_manager = MemoryManager()
-
-
 		self.tools = [
-
+			VisualizationTools()
 		]
 
 		self.agent = Agent(
+			instructions=[
+				"You are a data visualization assistant that creates charts and plots",
+				"Generate clear, informative visualizations based on user data",
+				"Save charts to files and provide insights about the data",
+			],
+
 			add_knowledge_to_context=True,
 			model=self.llm,
 			tools=self.tools,
 			knowledge=self.knowledge,
-			memory_manager=self.memory_manager,
 			markdown=True,
+			db=self.db,
+			enable_agentic_memory=True
 		)
 
 		print("AiAgent initialized with ChromaDB Knowledge Base.")

@@ -39,19 +39,13 @@ class ChromaStorage:
 
         logger.info(f"ChromaDB vector store initialized for collection '{self.collection_name}'.")
 
-    def add_documents(self, documents: List[Document]):
-        """
-        Splits, embeds, and stores a list of LangChain Documents in ChromaDB.
-        This is the primary method for adding new file content to the RAG system.
-        """
-        if not documents:
+    def add_document(self, document: Document):
+        if not document:
             logger.warning("No documents provided to add to the collection.")
             return
 
-        split_docs = self.text_splitter.split_documents(documents)
-
-        self.vector_store.add_documents(split_docs)
-        logger.info(f"Successfully processed and added {len(split_docs)} document chunks to ChromaDB.")
+        self.vector_store.add_documents([document])
+        logger.info(f"Successfully processed and added document chunk to ChromaDB.")
 
     def get_all_documents(self):
         """

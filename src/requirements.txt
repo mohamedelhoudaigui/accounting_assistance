@@ -27,3 +27,4 @@ docx2txt
 unstructured[all-docs]
 sentence-transformers
 langchain_huggingface
+matplotlib

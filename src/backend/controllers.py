@@ -3,19 +3,13 @@ import shutil
 from fastapi import UploadFile
 from agent.agent_setup import AiAgent
 from storage.FileProcessor import FileProcessor
-from storage.PostgresStorage import PostgresDataStorage
-from storage.MongoStorage import MongoStorage
 from storage.ChromaStorage import ChromaStorage
 
 from backend import models
 
 agent = AiAgent()
 file_processor = FileProcessor()
-db = PostgresDataStorage()
-mongo_db = MongoStorage()
 chroma_db = ChromaStorage()
-
-UPLOAD_DIR = "upload"
 
 # ------------- Agent intercation routes:
 
@@ -33,14 +27,14 @@ def process_and_store_file(file: UploadFile):
 	"""
 	Controller logic to save, process, and store a file.
 	"""
-	file_path = os.path.join(UPLOAD_DIR, file.filename)
+	file_path = os.path.join("/tmp", file.filename)
 
 	with open(file_path, "wb") as buffer:
 		shutil.copyfileobj(file.file, buffer)
 
 	try:
 		processed_document = file_processor.process_file(file_path)
-		chroma_db.add_documents(processed_document)
+		chroma_db.add_document(processed_document)
 
 		return {
 			"filename": file.filename,
